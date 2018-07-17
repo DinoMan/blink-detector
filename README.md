@@ -1,5 +1,3 @@
-# Bulletin
-Bulletin is responsible for hosting all the data that you want to visualise when running your experiments. It essentially wraps the calls to visdom and also provides additional functionality for saving the data to disc.
+# Blink Detector
+This is a blink detector still in progress.
 
-## Visdom
-Visddom is a python package that allows you to visualise graphs and images through your web browser. You can check out visdom [here](https://github.com/facebookresearch/visdom)
