@@ -267,7 +267,7 @@ class BlinkDetector:
         plt.show()
 
     @staticmethod
-    def read_landmarks_from_csv(filename):
+    def read_landmarks_from_csv(filename, landmark_type='2d'):
 
         with open(filename, newline='') as landmarks_file:
             landmark_reader = csv.reader(landmarks_file, delimiter=',', quotechar='|')
@@ -279,10 +279,22 @@ class BlinkDetector:
                 frame_landmarks = []
 
                 row = row[1:]
-                for index in range(0, len(row), 2):
-                    coordinates = [int(row[index + 1]), int(row[index])]
 
-                    frame_landmarks.append(coordinates)
+                if landmark_type == '3d':
+
+                    for index in range(0, len(row), 3):
+
+                        coordinates = [int(row[index + 2]), int(row[index + 1])]
+
+                        frame_landmarks.append(coordinates)
+
+                else:
+
+                    for index in range(0, len(row), 2):
+                        coordinates = [int(row[index + 1]), int(row[index])]
+
+                        frame_landmarks.append(coordinates)
+
 
                 landmarks.append(frame_landmarks)
 
@@ -294,10 +306,10 @@ class BlinkDetector:
 
     @staticmethod
     def visualize_points(video_file, csv_file, visualize_with_numbers=False, save_video=False,
-                         output_filename='default.mp4'):
+                         output_filename='default.mp4', landmark_type='2d'):
 
         cap = cv2.VideoCapture(video_file)
-        all_landmarks = BlinkDetector.read_landmarks_from_csv(csv_file)
+        all_landmarks = BlinkDetector.read_landmarks_from_csv(csv_file, landmark_type)
         frame_no = 0
 
         if save_video:
@@ -313,7 +325,7 @@ class BlinkDetector:
                 preds = all_landmarks[frame_no]
                 frame_no += 1
 
-                temp_img = BlinkDetector.draw_points(frame, preds, tag=visualize_with_numbers)
+                temp_img = MouthDetector.draw_points(frame, preds, tag=visualize_with_numbers)
 
                 cv2.imshow('Frame', temp_img)
                 cv2.waitKey(29)
@@ -424,7 +436,7 @@ class BlinkDetector:
                         current_file_num += 1
                         bar.update(current_file_num)
 
-    def process_video(self, video_file=None, csv_file=None):
+    def process_video(self, video_file=None, csv_file=None, landmark_type='2d'):
 
         video = skvideo.io.vread(video_file)
 
@@ -464,7 +476,7 @@ class BlinkDetector:
                 e_ratio.append(ear)
 
         else:  # get landmarks from the csv file
-            all_landmarks = self.read_landmarks_from_csv(csv_file)
+            all_landmarks = self.read_landmarks_from_csv(csv_file, landmark_type)
             for frame_no in range(all_landmarks.shape[0]):
                 landmarks = all_landmarks[frame_no]
 
