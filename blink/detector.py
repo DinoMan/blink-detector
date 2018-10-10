@@ -39,6 +39,9 @@ class Detector:
         self.counter = 0
         self.consecutive_closed_eyes = 0
 
+    def __swp_ext__(self, file, ext):
+        return os.path.splitext(file)[0] + ext
+
     def _get_blink_start_end_(self, points, signal):
 
         start_end = {"start": [], "end": []}
@@ -163,6 +166,7 @@ class Detector:
             newcsv = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
             for root, dirs, filenames in os.walk(input_dir):
                 for filename in filenames:
+
                     extension = os.path.splitext(filename)[1]
                     if extension in self.supported_types:
                         blink_start_end = self.process_video(video_file=os.path.join(root, filename))

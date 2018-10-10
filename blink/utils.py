@@ -16,7 +16,7 @@ def get_derivative(signal):
     return [(signal[i + 1] - signal[i]) for i in range(len(signal) - 1)]
 
 
-def save_blink_distribution(csv_file, title, save_path=None, display_results=True):
+def save_blink_distribution(csv_file, title, save_path=None, display_results=False):
     blink_amounts = []
     blink_durations = []
     counter = 0
@@ -44,17 +44,17 @@ def save_blink_distribution(csv_file, title, save_path=None, display_results=Tru
     plt.hist(blink_amounts, bins=range(max_blinks))  # arguments are passed to np.histogram
     plt.title(title)
     plt.xlabel("Blink Amount per Video")
-    fig = plt.ylabel("Count")
+    plt.ylabel("Count")
     if save_path is not None:
-        fig.savefig(save_path + "/blink_amounts.eps")
+        plt.savefig(save_path + "/blink_amounts.eps")
     if display_results:
         plt.show()
 
     plt.hist(blink_durations, bins=list(range(41)))  # arguments are passed to np.histogram
     plt.title(title)
     plt.xlabel("Avg Blink Duration per Video")
-    fig = plt.ylabel("Count")
+    plt.ylabel("Count")
     if save_path is not None:
-        fig.savefig(save_path + "/blink_durations.eps")
+        plt.savefig(save_path + "/blink_durations.eps")
     if display_results:
         plt.show()
