@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+from cycler import cycler
 import csv
+import numpy as np
 
 
 def get_mean_blink_duration(blink_limits):
@@ -16,7 +19,10 @@ def get_derivative(signal):
     return [(signal[i + 1] - signal[i]) for i in range(len(signal) - 1)]
 
 
-def save_blink_distribution(csv_file, title, save_path=None, display_results=False):
+def save_blink_distribution(csv_file, title, save_path=None, display_results=False, label=None, transparency=1.0,
+                            legend=None, font_size=22):
+    mpl.rcParams['axes.prop_cycle'] = cycler(color='bgrcmyk')
+
     blink_amounts = []
     blink_durations = []
     counter = 0
@@ -41,20 +47,41 @@ def save_blink_distribution(csv_file, title, save_path=None, display_results=Fal
     blink_amounts.append(counter)
     max_blinks = max(blink_amounts) + 2
 
-    plt.hist(blink_amounts, bins=range(max_blinks))  # arguments are passed to np.histogram
+    plt.figure(1)
+    plt.tick_params(labelsize=font_size-2)
+    plt.hist(blink_amounts, bins=range(max_blinks), label=label,
+             alpha=transparency)  # arguments are passed to np.histogram
     plt.title(title)
-    plt.xlabel("Blink Amount per Video")
-    plt.ylabel("Count")
+    plt.xlabel("Blinks/Video", fontsize=font_size)
+    plt.ylabel("# Videos", fontsize=font_size)
+    plt.tight_layout()
+    if legend is not None:
+        plt.legend(loc=legend, fontsize=font_size-3)
+
     if save_path is not None:
-        plt.savefig(save_path + "/blink_amounts.eps")
+        plt.savefig(save_path + "/blink_amounts.png")
     if display_results:
         plt.show()
 
-    plt.hist(blink_durations, bins=list(range(41)))  # arguments are passed to np.histogram
+    plt.figure(2)
+    plt.tick_params(labelsize=font_size-2)
+    plt.hist(blink_durations, bins=list(range(41)), label=label,
+             alpha=transparency)  # arguments are passed to np.histogram
     plt.title(title)
-    plt.xlabel("Avg Blink Duration per Video")
-    plt.ylabel("Count")
+    plt.xlabel("Blink Duration", fontsize=font_size)
+    plt.ylabel("# Blinks", fontsize=font_size)
+    plt.tight_layout()
+    if legend is not None:
+        plt.legend(loc=legend, fontsize=font_size-3)
+
     if save_path is not None:
-        plt.savefig(save_path + "/blink_durations.eps")
+        if transparency < 1.0:
+            extension = ".png"
+        else:
+            extension = ".eps"
+
+        plt.savefig(save_path + "/blink_durations" + extension)
     if display_results:
         plt.show()
+
+    return np.mean(blink_amounts), np.mean(blink_durations)

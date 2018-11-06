@@ -25,7 +25,7 @@ class Detector:
         self.EAR_TOL = 0.01
         self.EYE_PEAK_CONST = 4
         self.EYE_RUNNING_MEAN_WIDTH = 2
-        self.EYE_THRESH = 0.0425
+        self.EYE_THRESH = 0.072
         self.supported_types = {'.mpg', '.mp4', '.avi'}
 
         self.blink_found = False
