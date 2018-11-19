@@ -1,5 +1,5 @@
 # Blink Detector
-This is a blink detector capable of detecting blinks in frontal faces. There is support for batch processing and online blink detection (frame-by-frame).
+This is a blink detector capable of detecting blinks in frontal faces using facial landmarks. There is support for batch processing and online blink detection (frame-by-frame).
 
 # Installing the blink detector library
 pip install .
