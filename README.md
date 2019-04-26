@@ -6,3 +6,6 @@ pip install .
 
 # Running the demo
 python demo.py -v <videos_folder> -d <output_folder>
+
+# Acknowledgements
+This code was developed in collaboration with [Berk Tinaz](https://github.com/berktinaz), who implemented the offline blink detection
